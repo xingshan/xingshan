@@ -39,7 +39,7 @@ class ApiController extends Controller {
 	public function Reg()
 	{
 		$isok=TRUE;
-
+        //测试GIT
 		$username=trim(I('username')) ? trim(I('username')) : $isok=FALSE;
 		$password=trim(I('password')) ? trim(I('password')) : $isok=FALSE;
 		$nickname=trim(I('nickname')) ? trim(I('nickname')) : $isok=FALSE;
