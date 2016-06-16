@@ -1,0 +1,46 @@
+<script type="text/javascript">
+$(function(){
+	$.formValidator.initConfig({formID:"sessionEditForm",theme:'App',onError:function(msg){},onSuccess:sessionSaveEdit,inIframe:true});
+	$("#edit_session_name").formValidator({onShow:"请输入会话名称",onFocus:"会话名称应该为2-50位之间"}).inputValidator({min:2,max:50,empty:{leftEmpty:false,rightEmpty:false,emptyError:"会话名称两边不能有空格"},onError:"用户签名应该为2-50位之间"});
+})
+function sessionSaveEdit(){
+	$.post('{:U('Session/edit?id='.$info['id'])}', $("#sessionEditForm").serialize(), function(data){
+		if(!data.status){
+			$.messager.alert('提示信息', data.info, 'error');
+		}else{
+			sessionRefreshList_{$rand}()
+			$.messager.alert('提示信息', data.info, 'info');
+			$('#sessionEditBox').dialog('close');
+		}
+	})
+}
+</script>
+<form id="sessionEditForm" style="font-size:13px; padding: 5px 0 0 10px;">
+<table cellspacing="5">
+	<tr>
+		<td align="right">会话名称：</td>
+		<td><input type="text" id="edit_session_name" name="name" value="{$info.name}" style="width: 280px; height: 22px;"></td>
+		<td><div id="edit_session_nameTip"></div></td>
+	</tr>
+	<tr>
+		<td align="right">创<span style="margin-left: 6px;"></span>建<span style="margin-left: 7px;"></span>者：</td>
+		<td>{$info.creator}</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td align="right">人<span style="margin-left: 25px;"></span>数：</td>
+		<td>{$info.count}</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td align="right">创建时间：</td>
+		<td>{:date( 'Y-m-d H:i', $info['createtime'])}</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>
+			<input type="hidden" name="uid" value="{$info.uid}">
+		</td>
+	</tr>
+	</table>
+	</form>

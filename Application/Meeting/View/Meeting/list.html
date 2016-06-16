@@ -1,0 +1,98 @@
+<!-- 会议列表 -->
+<?php $rand = round(microtime(true),3)*1000;?>
+<table id="meetingList_{$rand}" class="easyui-datagrid" title="{$currentpos}" data-options="
+	fit:true,rownumbers:true,animate:true,fitColumns:true,
+	url:'{:U('meeting/index',array('uid'=>I('id',0)))}',idField:'id',border:false,
+	toolbar:'#meetingToolbar_{$rand}',pagination:true,singleSelect:true,pageSize:20,nowrap:false">
+<thead>
+	<tr>
+		<th data-options="field:'logo',width:10,align:'center',formatter:buildLogo">logo</th>
+		<th data-options="field:'name',width:20,align:'left'">会议标题</th>
+		<th data-options="field:'creator',width:10">创建者</th>
+		<th data-options="field:'memberCount',width:10,align:'center'">人数</th>
+		<th data-options="field:'start',width:10,align:'center'">开始时间</th>
+		<th data-options="field:'end',width:10,align:'center'">结束时间</th>
+		<th data-options="field:'createtime',width:10">创建时间</th>
+		<th data-options="field:'id',width:10,formatter:meetingOperateText">操作</th>
+	</tr>
+</thead>
+</table>
+
+<div id="meetingToolbar_{$rand}" style="padding:5px;height:auto">
+	<form id="meetingSearchForm_{$rand}">
+		<a href="javascript:;" onclick="meetingRefreshList_{$rand}();" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true">刷新</a>
+		<input type="text" name="search[name]" placeholder="根据名称搜索" style="height: 20px; width: 120px;padding-left: 3px;">
+		<a href="javascript:;" onclick="meetingSearch_{$rand}();" class="easyui-linkbutton" iconCls="icon-search">确定</a>		
+	</form>
+</div>
+
+
+
+<!-- 编辑 -->
+<div id="meetingEditBox" class="easyui-dialog" title="编辑会议"
+	data-options="modal:true,closed:true,iconCls:'icon-add',
+				buttons:[{text:'确定',iconCls:'icon-ok',
+				handler:function(){$('#meetingEditForm').submit();}},
+				{text:'取消',iconCls:'icon-cancel',
+				handler:function(){$('#meetingEditBox').dialog('close');}}]"
+	style="width: 600px; height: 480px;"></div>
+
+<script type="text/javascript">
+//刷新
+function meetingRefreshList_{$rand}(){
+	$('#meetingList_{$rand}').datagrid('reload');
+}
+//logo显示
+function buildLogo(val,row,index){
+	if(!val){
+		return '<div style="height:60px;padding:3px;margin:auto;"></div>';
+	}else{
+		return '<img src="'+val+'" height="60" style="padding:3px;">';	
+	}
+}
+//操作格式化
+function meetingOperateText(val, row, index){
+	var btn = [];
+		btn.push('<a href="javascript:void(0);" onclick="meetingEdit('+val+')">编辑</a>');
+		btn.push('<a href="javascript:void(0);" onclick="meetingDelete('+val+','+row.uid+')">删除</a>');
+	return btn.join(' | ');
+}
+//搜索会议
+function meetingSearch_{$rand}(){
+	var queryParams = $('#meetingList_{$rand}').datagrid('options').queryParams;
+	$.each($("#meetingSearchForm_{$rand}").form().serializeArray(), function (index) {
+		queryParams[this['name']] = this['value'];
+	});
+	$('#meetingList_{$rand}').datagrid('load');
+}
+//会议编辑
+function meetingEdit(id){
+	if(typeof(id) !== 'number'){
+		$.messager.alert('提示信息', '未选择', 'error');
+		return false;
+	}
+	var url = '{:U('meeting/edit')}';
+	url += url.indexOf('?') != -1 ? '&id='+id : '?id='+id;
+	url += '&rand={$rand}';
+	$('#meetingEditBox').dialog({href:url});
+	$('#meetingEditBox').dialog('open');
+}
+//会议删除 
+function meetingDelete(id, uid){
+	if(typeof(id) !== 'number'){
+		$.messager.alert('提示信息', '未选择', 'error');
+		return false;
+	}
+	$.messager.confirm('提示信息', '确定要删除吗？', function(result){
+		if(!result) return false;
+		$.post('{:U('meeting/delete')}', {id: id, uid: uid}, function(data){
+			if(!data.status){
+				$.messager.alert('提示信息', data.info, 'error');
+			}else{
+				meetingRefreshList_{$rand}();
+				$.messager.alert('提示信息', data.info, 'info');
+			}
+		}, 'json');
+	});
+}
+</script>

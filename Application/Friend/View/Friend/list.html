@@ -1,0 +1,76 @@
+<!-- 朋友圈列表 -->
+<?php $rand = round(microtime(true),3)*1000;?>
+<table id="friendList_{$rand}" class="easyui-datagrid" title="{$currentpos}" data-options="
+	fit:true,rownumbers:true,animate:true,fitColumns:true,
+	url:'{:U('friend/index',array('uid'=>I('id',0)))}',idField:'id',border:false,
+	toolbar:'#friendToolbar_{$rand}',pagination:true,singleSelect:true,pageSize:20,nowrap:false">
+<thead>
+	<tr>
+		<th data-options="field:'nickname',width:10">分享用户</th>
+		<th data-options="field:'content',width:20">内容</th>
+		<th data-options="field:'picture',width:40,formatter:friendTextPicture">图片</th>
+		<th data-options="field:'createtime',width:10">创建时间</th>
+		<th data-options="field:'id',width:10,formatter:friendOperateText">操作</th>
+	</tr>
+</thead>
+</table>
+
+<div id="friendToolbar_{$rand}" style="padding:5px;height:auto">
+	<form id="friendSearchForm_{$rand}">
+		<a href="javascript:;" onclick="friendRefreshList_{$rand}();" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true">刷新</a>
+		<input type="text" name="search[name]" placeholder="根据内容搜索" style="height: 20px; width: 120px;padding-left: 3px;">
+		<a href="javascript:;" onclick="friendSearch_{$rand}();" class="easyui-linkbutton" iconCls="icon-search">确定</a>		
+	</form>
+</div>
+
+<script type="text/javascript">
+//刷新
+function friendRefreshList_{$rand}(){
+	$('#friendList_{$rand}').datagrid('reload');
+}
+//图片显示
+function friendTextPicture(val,row,index){
+	var length = val.length;
+	if (length > 0){
+		var html = '';
+		for(var i=0; i<val.length; i++){
+			html += '<img src="'+val[i].smallUrl+'" height="60" style="padding:3px;">';
+		}
+		return html;
+	}else{
+		return '<div style="height:60px;padding:3px;margin:auto;"></div>';
+	}
+}
+//操作格式化
+function friendOperateText(val, row, index){
+	var btn = [];
+		btn.push('<a href="javascript:void(0);" onclick="friendDelete('+val+','+row.uid+')">删除</a>');
+	return btn.join(' | ');
+}
+//搜索朋友圈
+function friendSearch_{$rand}(){
+	var queryParams = $('#friendList_{$rand}').datagrid('options').queryParams;
+	$.each($("#friendSearchForm_{$rand}").form().serializeArray(), function (index) {
+		queryParams[this['name']] = this['value'];
+	});
+	$('#friendList_{$rand}').datagrid('load');
+}
+//朋友圈删除 
+function friendDelete(id, uid){
+	if(typeof(id) !== 'number'){
+		$.messager.alert('提示信息', '未选择', 'error');
+		return false;
+	}
+	$.messager.confirm('提示信息', '确定要删除吗？', function(result){
+		if(!result) return false;
+		$.post('{:U('friend/delete')}', {id: id, uid: uid}, function(data){
+			if(!data.status){
+				$.messager.alert('提示信息', data.info, 'error');
+			}else{
+				friendRefreshList_{$rand}();
+				$.messager.alert('提示信息', data.info, 'info');
+			}
+		}, 'json');
+	});
+}
+</script>

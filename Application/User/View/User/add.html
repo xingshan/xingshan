@@ -1,0 +1,52 @@
+<script type="text/javascript">
+
+alert("1");
+
+</script>
+<form id="userAddForm" style="font-size:13px; padding: 5px 0 0 10px;" onsubmit="" >
+<table cellspacing="5">
+	<tr>
+		<td></td>
+		<td colspan="2" align="center">
+			<div style="float: left; width:auto;">
+				<div style="float: left; width:auto; padding: 2px;">
+					<img id="add_user_image" src="" height="80px;" style="min-width: 80px;padding: 3px; border: 1px solid #fcc;"/>
+				</div>
+			</div>
+			<div style="margin-left: 5px; float: left; width:240px; height:80px; padding:5px;">
+				<div style="width: 100%; height: 30px;"></div>
+				<input id="add_user_upload" name="add_user_upload" type="file"/>
+			</div>
+			<input id="add_user_head" name="info[headsmall]" value="" type="hidden"/>
+		</td>
+	</tr>
+	<tr>
+		<td width="80">手<span style="margin-left: 6px;"></span>机<span style="margin-left: 7px;"></span>号：</td>
+		<td><input type="text" name="info[phone]" id="user_add_phone" value="" style="width:280px;height:22px" /></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>用户昵称：</td>
+		<td><input type="text" name="info[nickname]" id="user_add_nickname" value="" style="width:280px;height:22px" /></td>
+		<td><div id="user_add_nicknameTip"></div></td>
+	</tr>
+	<tr>
+		<td>真实性别：</td>
+		<td>
+	
+			<input id="user_add_realname" class="easyui-combobox" name="info[gender]" value="0"
+					data-options="
+						valueField:'id',
+						textField:'text',
+						data: [{'id':'0','text':'男'},{'id':'1','text':'女'}],
+						panelHeight:'auto'," /> 
+			</td>
+		<td><div id="user_add_genderTip"></div></td>
+	</tr>
+	<tr>
+		<td>用户签名：</td>
+		<td><textarea name="info[sign]" id="user_add_sign" style="width: 280px; height: 88px;"></textarea></td>
+		<td><div id="user_add_signTip"></div></td>
+	</tr>
+	</table>
+	</form>

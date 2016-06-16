@@ -1,0 +1,108 @@
+<?php $rand = round(microtime(true),3)*1000;?>
+<table id="companylist_{$rand}" class="easyui-datagrid" title="{$currentpos}" data-options="fit:true,rownumbers:true,animate:true,fitColumns:true,
+	url:'{:U('Company/index',array('uid'=>I('id',0)))}',idField:'id',border:false,toolbar:'#companyToolbar_{$rand}',pagination:true,singleSelect:true,pageSize:20,nowrap:false">
+<thead>
+	<tr>
+		<th data-options="field:'name',width:9,align:'left'">公司名称</th>
+		<th data-options="field:'address',width:9,align:'left'">公司地址</th>
+
+		<th data-options="field:'boss',width:9,align:'left'">负责人姓名</th>
+		<th data-options="field:'phone',width:9,align:'left'">负责人电话</th>
+		<th data-options="field:'adminname',width:9">超级管理员账号</th>
+		<th data-options="field:'adminrealname',width:9">超级管理员姓名</th>
+		<th data-options="field:'adminphone',width:9">超级管理员电话</th>
+				<th data-options="field:'edittime',width:9">最后修改时间</th>
+		<th data-options="field:'editadmin',width:9,align:'left'">最后修改者</th>
+		<th data-options="field:'id',width:9,formatter:companyOperateText">操作</th>
+	</tr>
+</thead>
+</table>
+
+<div id="companyToolbar_{$rand}" style="padding:5px;height:auto">
+	<form id="companySearchForm_{$rand}">
+		<a href="javascript:;" onclick="companyRefreshList_{$rand}();" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true">刷新</a>
+		<input type="text" name="search[name]" placeholder="根据名称搜索" style="height: 20px; width: 120px;padding-left: 3px;">
+		<a href="javascript:;" onclick="companySearch();" class="easyui-linkbutton" iconCls="icon-search">确定</a>
+		<a href="javascript:;" onclick="companyAdd_{$rand}();" class="easyui-linkbutton" iconCls="icon-add">添加新公司</a>		
+	</form>
+</div>
+
+
+<div id="CompanyAddBox" class="easyui-dialog" title="添加新公司"
+	data-options="modal:true,closed:true,iconCls:'icon-add',
+				buttons:[{text:'确定',iconCls:'icon-ok',
+				handler:function(){$('#CompanyAddForm').submit();}},
+				{text:'取消',iconCls:'icon-cancel',
+				handler:function(){$('#CompanyAddBox').dialog('close');}}]"
+	style="width: 600px; height: 480px;"></div>
+
+<!-- 编辑 -->
+<div id="CompanyEditBox" class="easyui-dialog" title="编辑公司信息"
+	data-options="modal:true,closed:true,iconCls:'icon-add',
+				buttons:[{text:'确定',iconCls:'icon-ok',
+				handler:function(){$('#CompanyEditForm').submit();}},
+				{text:'取消',iconCls:'icon-cancel',
+				handler:function(){$('#CompanyEditBox').dialog('close');}}]"
+	style="width: 600px; height: 480px;"></div>
+
+<script type="text/javascript">
+function companyAdd_{$rand}(){
+	var url = '{:U('Company/add')}';
+	url += '?rand={$rand}';
+	//alert(url);
+	$('#CompanyAddBox').dialog({href:url});
+	$('#CompanyAddBox').dialog('open');
+	
+}
+//刷新
+function companyRefreshList_{$rand}(){
+	$('#companylist_{$rand}').datagrid('reload');
+}
+//操作格式化
+function companyOperateText(val, row, index){
+	var btn = [];
+		btn.push('<a href="javascript:void(0);" onclick="companyEdit('+val+')">编辑</a>');
+		btn.push('<a href="javascript:void(0);" onclick="companyDelete('+val+','+row.uid+')">删除</a>');
+	return btn.join(' | ');
+}
+//搜索会议
+function companySearch(){
+	var queryParams = $('#companylist_{$rand}').datagrid('options').queryParams;
+	$.each($("#companySearchForm_{$rand}").form().serializeArray(), function (index) {
+		queryParams[this['name']] = this['value'];
+	});
+	$('#companylist_{$rand}').datagrid('load');
+}
+//会议编辑
+function companyEdit(id){
+	if(typeof(id) !== 'number'){
+		$.messager.alert('提示信息', '未选择', 'error');
+		return false;
+	}
+	var url = '{:U('Company/edit')}';
+	url += url.indexOf('?') != -1 ? '&id='+id : '?id='+id;
+	url += '&rand={$rand}';
+	$('#CompanyEditBox').dialog({href:url});
+	$('#CompanyEditBox').dialog('open');
+}
+//会议删除 
+function companyDelete(id, uid){
+	if(typeof(id) !== 'number'){
+		$.messager.alert('提示信息', '未选择', 'error');
+		return false;
+	}
+	$.messager.confirm('提示信息', '确定要删除吗？', function(result){
+		if(!result) return false;
+		$.post('{:U('Company/delete')}', {id: id}, function(data){
+			if(!data.status){
+				$.messager.alert('提示信息', data.info, 'error');
+			}else{
+				companySearch();
+				$.messager.alert('提示信息', data.info, 'info');
+				
+			}
+		}, 'json');
+	});
+}
+
+</script>

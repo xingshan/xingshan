@@ -1,0 +1,34 @@
+<div class="easyui-panel" data-options="fit:true,title:'{$currentpos}',border:false">
+<script type="text/javascript">
+$(function(){
+	$('#helpSubbtn').click(function(){$('#helpForm').submit()});
+	$.formValidator.initConfig({formID:"helpForm",theme:'App',onSuccess:helpTextSave,submitAfterAjaxPrompt:'有数据正在异步验证，请稍等...',inIframe:true});
+	$("#help_text").formValidator({onShow:"请输入内容",onFocus:"请输入内容"}).inputValidator({min:1,max:9999999,onError:"内容不能为空"});
+})
+function helpTextSave(){
+	$.post('{:U('User/help')}', $("#helpForm").serialize(), function(data){
+		if(!data.status){
+			$.messager.alert('提示信息', data.info, 'error');
+		}else{
+			$.messager.alert('提示信息', data.info, 'info');
+		}
+	})
+}
+</script>
+<form id="helpForm" style="padding: 10px;">
+	<table id="addBox" width="100%">
+		<tr>
+			<td>
+				<textarea id="help_text" class="easyui-kindeditor" name="text" style="width:100%; height: 400px;"> {$text} </textarea>
+			</td>
+			<td><div id="help_textTip"></div></td>
+		</tr>
+		<tr>
+			<td align="center" style="padding-top: 10px;">
+				<a id="helpSubbtn" class="easyui-linkbutton" style="width: 70px;">提交</a>
+			</td>
+			<td></td>
+		</tr>
+	</table>
+</form>
+</div>

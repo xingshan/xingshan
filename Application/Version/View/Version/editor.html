@@ -1,0 +1,34 @@
+<div class="easyui-panel" data-options="fit:true,title:'<!--{$currentpos}-->',border:false">
+<script type="text/javascript">
+$(function(){
+	$('#editorSubbtn').click(function(){$('#editorForm').submit()});
+	$.formValidator.initConfig({formID:"editorForm",theme:'App',onSuccess:editorTextSave,submitAfterAjaxPrompt:'有数据正在异步验证，请稍等...',inIframe:true});
+	$("#editor_text").formValidator({onShow:"请输入内容",onFocus:"请输入内容"}).inputValidator({min:1,max:9999999,onError:"内容不能为空"});
+})
+function editorTextSave(){
+	$.post('<!--{:U('Apk/editor')}-->', $("#editorForm").serialize(), function(data){
+		if(!data.status){
+			$.messager.alert('提示信息', data.info, 'error');
+		}else{
+			$.messager.alert('提示信息', data.info, 'info');
+		}
+	})
+}
+</script>
+<form id="editorForm" style="padding: 10px;">
+	<table id="addBox" width="100%">
+		<tr>
+			<td>
+				<textarea id="editor_text" class="easyui-kindeditor" name="text" style="width:100%; height: 400px;">编辑器调用显示 class="easyui-kindeditor"</textarea>
+			</td>
+			<td><div id="editor_textTip"></div></td>
+		</tr>
+		<tr>
+			<td align="center" style="padding-top: 10px;">
+				<a id="editorSubbtn" class="easyui-linkbutton">提交</a>
+			</td>
+			<td></td>
+		</tr>
+	</table>
+</form>
+</div>

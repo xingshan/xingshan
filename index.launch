@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.php.debug.core.launching.webPageLaunch">
+<booleanAttribute key="auto_generated_url" value="true"/>
+<stringAttribute key="base_url" value="http://localhost:8080/binfen/index.php"/>
+<stringAttribute key="debugContinue" value="http://localhost:8080/binfen/index.php"/>
+<booleanAttribute key="debugFromURL" value="false"/>
+<stringAttribute key="debugOutputEncoding" value=""/>
+<stringAttribute key="debugPages" value="debugFrom"/>
+<stringAttribute key="debugTransferEncoding" value=""/>
+<stringAttribute key="file_name" value="/binfen/index.php"/>
+<booleanAttribute key="firstLineBreakpoint" value="true"/>
+<stringAttribute key="name" value="phpserver"/>
+<stringAttribute key="org.eclipse.debug.ui.ATTR_CONSOLE_ENCODING" value="UTF-8"/>
+<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+<listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
+</listAttribute>
+<booleanAttribute key="org.eclipse.php.debug.core.OpenInBrowser" value="true"/>
+<intAttribute key="org.eclipse.php.debug.core.PHP_Port" value="12345"/>
+<stringAttribute key="org.eclipse.php.debug.core.PHP_Project" value="/binfen"/>
+<booleanAttribute key="org.eclipse.php.debug.core.RunWithDebugInfo" value="true"/>
+<stringAttribute key="org.eclipse.php.debug.coreconfiguration_delegate_class" value="org.eclipse.php.internal.debug.core.launching.PHPWebPageLaunchDelegate"/>
+<stringAttribute key="org.eclipse.php.debug.corephp_debugger_id" value="org.eclipse.php.debug.core.zendDebugger"/>
+<stringAttribute key="php_debug_type" value="php_web_page_debug"/>
+</launchConfiguration>

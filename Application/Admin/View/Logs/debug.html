@@ -1,0 +1,55 @@
+<div class="easyui-panel"
+	data-options="fit:true,title:'{$currentpos}',border:false">
+<script type="text/javascript">
+$(function(){
+	$('#debugSubmit').click(function(){$('#debugForm').submit()});
+	$.formValidator.initConfig({formID:"debugForm",theme:'App',onSuccess:debugInfoSave,inIframe:true});
+})
+function debugInfoSave(){
+	$.post('{:U('Logs/debug')}', $("#debugForm").serialize(), function(data){
+		if(!data.status){
+			$.messager.alert('提示信息', data.info, 'error');
+		}else{
+			$.messager.alert('提示信息', data.info, 'info');
+		}
+	})
+}
+</script>
+	<form id="debugForm" style="font-size: 13px">
+		<table cellspacing="10" style="border: 1px solid #ccc; width: 500px;">
+			<if condition="$info">
+				<tr>
+					<td width="80">调试模式：</td>
+					<td width="40">
+						<input type="radio" name="debug" id="realname" value="1" checked="checked"/></td>
+					<td>此模式用户网站开发阶段，会产生大量的logs文件</td>
+				</tr>
+				<tr>
+					<td>部署模式：</td>
+					<td>
+						<input type="radio" name="debug" id="email" value="0"/></td>
+					<td>此模式用户网站正式运营情况下，提高效率</td>
+				</tr>
+			<else/>
+				<tr>
+					<td width="80">调试模式：</td>
+					<td width="40">
+						<input type="radio" name="debug" id="realname" value="1"/></td>
+					<td>此模式用户网站开发阶段，会产生大量的logs文件</td>
+				</tr>
+				<tr>
+					<td>部署模式：</td>
+					<td>
+						<input type="radio" name="debug" id="email" value="0" checked="checked"/></td>
+					<td>此模式用户网站正式运营情况下，提高效率</td>
+				</tr>
+			</if>
+			<tr>
+				<td></td>
+				<td colspan="2" align="left">
+					<a id="debugSubmit" class="easyui-linkbutton" style="width: 50px;">提交</a>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>

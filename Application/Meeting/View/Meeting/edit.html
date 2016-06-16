@@ -1,0 +1,97 @@
+<script type="text/javascript">
+$(function(){
+	$('#edit_meeting_upload').uploadify({
+		'swf'      : '__PUBLIC__/js/uploadify/uploadify.swf',
+		'uploader' : '{:U('meeting/public_upload?uid='.$info["id"])}',
+		'buttonText': '选择图片',
+		'width'	: 70,
+		'height': 28,
+		'buttonClass': 'upload_button',
+		'auto'	: true,
+		'removeTimeout' : 0,//文件队列上传完成1秒后删除
+		'fileTypeDesc' : 'Image Files',//只允许上传图像
+		'fileTypeExts' : '*.gif; *.jpg; *.png',//限制允许上传的图片后缀
+		'onUploadSuccess' : function(file, data, response){
+			var data = $.parseJSON(data);
+			if(!data.status){
+				$.messager.alert('提示信息', data.info, 'error');
+			}else{
+				$('#edit_meeting_image').attr('src',data.url);
+				$('#edit_meeting_head').attr('value',data.url);
+			}
+		}
+	});
+	$.formValidator.initConfig({formID:"meetingEditForm",theme:'App',onError:function(msg){},onSuccess:meetingSaveEdit,inIframe:true});
+	$("#edit_meeting_name").formValidator({onShow:"请输入会议名称",onFocus:"会议名称应该为2-50位之间"}).inputValidator({min:2,max:50,empty:{leftEmpty:false,rightEmpty:false,emptyError:"会议名称两边不能有空格"},onError:"用户签名应该为2-50位之间"});
+})
+function meetingSaveEdit(){
+	$.post('{:U('meeting/edit?id='.$info['id'])}', $("#meetingEditForm").serialize(), function(data){
+		if(!data.status){
+			$.messager.alert('提示信息', data.info, 'error');
+		}else{
+			meetingRefreshList_{$rand}()
+			$.messager.alert('提示信息', data.info, 'info');
+			$('#meetingEditBox').dialog('close');
+		}
+	})
+}
+</script>
+<form id="meetingEditForm" style="font-size:13px; padding: 5px 0 0 10px;">
+<table cellspacing="5">
+	<tr>
+		<td></td>
+		<td colspan="2" align="center">
+			<div style="float: left; width:auto;">
+				<div style="float: left; width:auto; padding: 2px;">
+					<img id="edit_meeting_image" src="{$info.logo}" height="80px;" style="min-width: 80px;padding: 3px; border: 1px solid #ccc;">
+				</div>
+			</div>
+			<div style="margin-left: 5px; float: left; width:240px; height:80px; padding:5px;">
+				<div style="width: 100%; height: 30px;"></div>
+				<input id="edit_meeting_upload" name="edit_meeting_upload" type="file">
+			</div>
+			<input id="edit_meeting_head" name="info[logo]" value="{$info.logo}" type="hidden">
+		</td>
+	</tr>
+	<tr>
+		<td align="right">会议名称：</td>
+		<td><input type="text" id="edit_meeting_name" name="info[name]" value="{$info.name}" style="width: 280px; height: 22px;"></td>
+		<td><div id="edit_meeting_nameTip"></div></td>
+	</tr>
+	<tr>
+		<td align="right">会议主题：</td>
+		<td><textarea id="edit_meeting_content" name="info[content]" style="width: 280px; height: 88px;">{$info.content}</textarea></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td align="right">创<span style="margin-left: 6px;"></span>建<span style="margin-left: 7px;"></span>者：</td>
+		<td>{$info.creator}</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td align="right">人<span style="margin-left: 25px;"></span>数：</td>
+		<td>{$info.memberCount}</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td align="right">开始时间：</td>
+		<td>{:date( 'Y-m-d H:i', $info['start'])}</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td align="right">结束时间：</td>
+		<td>{:date( 'Y-m-d H:i', $info['end'])}</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td align="right">创建时间：</td>
+		<td>{:date( 'Y-m-d H:i', $info['createtime'])}</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>
+			<input type="hidden" name="inf[uid]" value="{$info.uid}">
+		</td>
+	</tr>
+	</table>
+	</form>

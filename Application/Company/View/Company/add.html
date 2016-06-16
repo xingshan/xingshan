@@ -1,0 +1,81 @@
+<script type="text/javascript">
+$(function(){
+	$.formValidator.initConfig({formID:"CompanyAddForm",theme:'App',onError:function(msg){
+		
+	},onSuccess:CompanySaveAdd,submitAfterAjaxPrompt:'有数据正在异步验证，请稍等...',inIframe:true});
+	
+	$("#CompanyAdd_username").formValidator({onShow:"请输入公司名",onFocus:"请输入公司名"}).inputValidator({min:1,max:100,empty:{leftEmpty:false,rightEmpty:false,emptyError:"请输入公司名"},onError:"请输入公司名"});
+	$("#CompanyAdd_address").formValidator({onShow:"请输入公司地址",onFocus:"请输入公司地址"}).inputValidator({min:1,max:100,empty:{leftEmpty:false,rightEmpty:false,emptyError:"请输入公司地址"},onError:"请输入公司地址"});
+	$("#CompanyAdd_boss").formValidator({onShow:"请输入负责人姓名",onFocus:"请输入负责人姓名"}).inputValidator({min:1,max:100,empty:{leftEmpty:false,rightEmpty:false,emptyError:"请输入负责人姓名"},onError:"请输入负责人姓名"});
+	$("#CompanyAdd_phone").formValidator({onShow:"请输入负责人电话",onFocus:"请输入负责人电话"}).inputValidator({min:1,max:100,empty:{leftEmpty:false,rightEmpty:false,emptyError:"请输入负责人电话"},onError:"请输入负责人电话"});
+	$("#CompanyAdd_arealname").formValidator({onShow:"请输入超级管理员姓名",onFocus:"请输入超级管理员姓名"}).inputValidator({min:1,max:100,empty:{leftEmpty:false,rightEmpty:false,emptyError:"请输入超级管理员姓名"},onError:"请输入超级管理员姓名"});
+	$("#CompanyAdd_aphone").formValidator({onShow:"请输入超级管理员电话",onFocus:"请输入超级管理员电话"}).inputValidator({min:1,max:100,empty:{leftEmpty:false,rightEmpty:false,emptyError:"请输入超级管理员电话"},onError:"请输入超级管理员电话"});
+	$("#CompanyAdd_ausername").formValidator({onShow:"请输入超级管理员账号",onFocus:"请输入超级管理员账号"}).inputValidator({min:1,max:100,empty:{leftEmpty:false,rightEmpty:false,emptyError:"请输入超级管理员账号"},onError:"请输入超级管理员账号"});
+	$("#CompanyAdd_apassword").formValidator({onShow:"请输入超级管理员密码",onFocus:"请输入超级管理员密码"}).inputValidator({min:1,max:100,empty:{leftEmpty:false,rightEmpty:false,emptyError:"请输入超级管理员密码"},onError:"请输入超级管理员密码"});
+	
+})
+function CompanySaveAdd(){
+	//alert("a");
+	$.post('{:U('Company/add')}', $("#CompanyAddForm").serialize(), function(data){
+		if(!data.status){
+			$.messager.alert('提示信息', data.info, 'error');
+		}else{
+			
+			$('#CompanyAddBox').dialog('close');
+			$.messager.alert('提示信息', data.info, 'info');
+			companySearch();
+			
+		}
+	});
+}
+</script>
+<form id="CompanyAddForm" style="font-size:13px; padding: 5px 0 0 10px;">
+<table>
+	<tr>
+		<td width="120">公司名称：</td>   
+		<td><input type="text" name="info[name]" id="CompanyAdd_username" style="width:180px;height:22px"  /></td>
+		<td><div id="CompanyAdd_usernameTip"></div></td>
+	</tr>
+	<tr>
+		<td>公司地址：</td>
+		<td><input type="text" name="info[address]" id="CompanyAdd_address" style="width:180px;height:22px"  /></td>
+		<td><div id="CompanyAdd_addressTip"></div></td>
+	</tr>
+	<tr>
+		<td>负责人姓名：</td>
+		<td><input type="text" name="info[boss]" id="CompanyAdd_boss" style="width:180px;height:22px"  /></td>
+		<td><div id="CompanyAdd_bossTip"></div></td>
+	</tr>
+	<tr>
+		<td>负责人电话：</td>
+		<td><input type="text" name="info[phone]" id="CompanyAdd_phone" style="width:180px;height:22px"  /></td>
+		<td><div id="CompanyAdd_phoneTip"></div></td>
+	</tr>
+	<tr>
+		<td>超级管理员姓名：</td>
+		<td><input type="text" name="info[arealname]" id="CompanyAdd_arealname" style="width:180px;height:22px" /></td>
+		<td><div id="CompanyAdd_arealnameTip"></div></td>
+	</tr>
+	
+	
+	<tr>
+		<td>超级管理员电话：</td>
+		<td><input type="text" name="info[aphone]" id="CompanyAdd_aphone" style="width:180px;height:22px" /></td>
+		<td><div id="CompanyAdd_aphoneTip"></div></td>
+	</tr>
+	<tr>
+		<td>超级管理员账号：</td>
+		<td><input type="text" name="info[ausername]" id="CompanyAdd_ausername" style="width:180px;height:22px" />
+		</td>
+		<td><div id="CompanyAdd_ausernameTip"></div></td>
+	</tr>
+	<tr>
+		<td>超级管理员密码：</td>
+		<td>
+			<input type="text" name="info[apassword]" id="CompanyAdd_apassword" style="width:180px;height:22px" value="123456" />
+		</td>
+		<td><div id="CompanyAdd_apasswordTip"></div></td>
+	</tr>
+</table>
+</form>
+

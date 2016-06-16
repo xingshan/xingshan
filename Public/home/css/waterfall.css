@@ -1,0 +1,8 @@
+
+body{text-align:center;}
+/*Download by http://www.codefans.net*/
+#stage{ margin:0 auto; padding:0; width:880px; }
+#stage li{ margin:0; padding:0; list-style:none;float:left; width:220px;}
+#stage li div{ font-size:12px; padding:10px; color:#999999; text-align:left; }
+.loading-wrap{bottom: 50px;width: 100%;height: 52px;text-align: center;clear:both;}
+.loading{padding: 10px;height: 32px;line-height: 28px;color: #FFF;font-size: 14px;border-radius: 5px;background: 10px center rgba(0,0,0,.7);}

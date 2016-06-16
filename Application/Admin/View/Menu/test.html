@@ -1,0 +1,145 @@
+<table id="TestList" title="Folder Browser" class="easyui-treegrid"
+		data-options="
+			url: '{:U('Menu/test')}',
+			rownumbers: true,
+			idField: 'id',
+			treeField: 'name',
+			toolbar:Menutoolbar,
+			animate: true,
+			collapsible: true,
+			fitColumns: true,
+			/* loadFilter: pagerFilter,
+			pagination: true,
+			pageSize: 2,
+			pageList: [2,5,10] */
+		">
+	<thead>
+		<tr>
+			<th
+				data-options="field:'listorder',formatter:MenuOrderBox,width:20,align:'center'">排序</th>
+			<th data-options="field:'name',editor:'text'" width="220">菜单名称</th>
+			<th data-options="field:'m',editor:'text'" width="100" align="right">m</th>
+			<th data-options="field:'a',editor:'text'" width="150">a</th>
+			<th
+				data-options="field:'operateid',formatter:MenuOperateText,width:80,align:'center'">管理操作</th>
+		</tr>
+	</thead>
+</table>
+	
+<!-- 添加菜单 -->
+<div id="addMenuBox" class="easyui-dialog" title="添加菜单"
+	data-options="modal:true,closed:true,iconCls:'icon-add',buttons:[{text:'确定',iconCls:'icon-ok',handler:function(){$('#addForm').submit();}},{text:'取消',iconCls:'icon-cancel',handler:function(){$('#addMenuBox').dialog('close');}}]"
+	style="width: 500px; height: 270px;"></div>
+
+<script type="text/javascript">
+//工具栏
+var Menutoolbar = [
+	{ text: '刷新', iconCls: 'icon-reload', handler: TestRefreshList },
+	{ text: '添加菜单', iconCls: 'icon-add', handler: addTest },
+	{ text: '编辑', iconCls: 'icon-edit', handler: edit },
+	{ text: '保存', iconCls: 'icon-save', handler: save },
+	{ text: '取消', iconCls: 'icon-cancel', handler: cancel },
+];
+//排序内容格式化
+function MenuOrderBox(val){
+	//var arr = val.split("_");
+	return '<input class="MenuListOrder" type="text" name="order['+val+']" value="'+ val +'" size="2" style="text-align:center">';
+}
+//操作内容格式化
+function MenuOperateText(id){
+	return '<a href="javascript:void(0);" onclick="addMenu('+id+')">添加子菜单</a> | <a href="javascript:void(0);" onclick="editMenu('+id+')">修改</a> | <a href="javascript:void(0);" onclick="deleteMenu('+id+')">删除</a>';
+}
+//添加菜单
+function addTest(parentid){
+	if(typeof(parentid) !== 'number') parentid = 0;
+	var url = '{:U('Menu/add')}';
+	url += url.indexOf('?') != -1 ? '&parentid='+parentid : '?parentid='+parentid;
+	$('#addMenuBox').dialog({href:url});
+	$('#addMenuBox').dialog('open');
+}
+//刷新菜单列表
+function TestRefreshList(){
+	$('#TestList').treegrid('reload');
+}
+//树子分页
+function pagerFilter(data){
+    if ($.isArray(data)){    // is array  
+        data = {  
+            total: data.length,  
+            rows: data  
+        }  
+    }
+    var dg = $(this);  
+	var state = dg.data('treegrid');
+    var opts  = dg.treegrid('options');  
+    var pager = dg.treegrid('getPager');  
+    pager.pagination({  
+        onSelectPage:function(pageNum, pageSize){  
+            opts.pageNumber = pageNum;  
+            opts.pageSize = pageSize;  
+            pager.pagination('refresh',{  
+                pageNumber:pageNum,  
+                pageSize:pageSize  
+            });  
+            dg.treegrid('loadData',data);  
+        }  
+    });  
+    if (!data.topRows){  
+    	data.topRows = [];
+    	data.childRows = [];
+    	for(var i=0; i<data.rows.length; i++){
+    		var row = data.rows[i];
+    		row._parentId ? data.childRows.push(row) : data.topRows.push(row);
+    	}
+		data.total = (data.topRows.length);
+    }  
+    var start = (opts.pageNumber-1)*parseInt(opts.pageSize);  
+    var end = start + parseInt(opts.pageSize);  
+	data.rows = $.extend(true,[],data.topRows.slice(start, end).concat(data.childRows));
+	return data;
+}
+
+var editingId;
+function edit(){
+	if (editingId != undefined){
+		$('#TestList').treegrid('select', editingId);
+		return;
+	}
+	var row = $('#TestList').treegrid('getSelected');
+	if (row){
+		editingId = row.id
+		$('#TestList').treegrid('beginEdit', editingId);
+	}
+}
+function dump_obj(myObject) {  
+	  var s = "";  
+	  for (var property in myObject) {  
+	   s = s + "\n "+property +": " + myObject[property] ;  
+	  }  
+	  alert(s);  
+	}  
+
+function save(){
+	if (editingId != undefined){
+		var t = $('#TestList');
+		t.treegrid('endEdit', editingId);
+		var rows = t.treegrid('getSelected');
+		$.post('{:U('Menu/test_edit')}', {data:rows}, function(data){
+			if(!data.status){
+				$.messager.alert('提示信息', data.info, 'error');
+			}else{
+				//TestRefreshList();
+				t.treegrid('refresh',editingId)
+				editingId = undefined;
+				$.messager.alert('提示信息', data.info, 'info');
+			}
+		}, 'json');
+	}
+}
+function cancel(){
+	if (editingId != undefined){
+		$('#TestList').treegrid('cancelEdit', editingId);
+		editingId = undefined;
+	}
+}
+</script>

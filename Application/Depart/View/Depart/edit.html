@@ -1,0 +1,112 @@
+<script type="text/javascript">
+$(function(){
+
+	
+	$("#departAdd_name").formValidator({onShow:"请输入公司名",onFocus:"请输入公司名"}).inputValidator({min:1,max:100,empty:{leftEmpty:false,rightEmpty:false,emptyError:"请输入部门名"},onError:"请输入部门名"});
+
+})
+
+
+function companyChange(o){
+	//alert(o.value);
+	var abc= o.value;
+	
+	if(abc==0){
+		document.getElementById('setlectPanelstr').innerHTML='';
+		
+	}
+	
+	$.post("{:U('depart/getcompany')}",{"company_id":abc}, function(data){
+		if(!data.status){
+			//alert(data.str);
+		
+			if(data.str!=''){
+				$('#setlectPanel').html(data.str);		
+				departShowName();
+			}
+		}else{
+			
+		}
+	});
+}
+
+function departChange(o){
+	//alert(o.value);
+	var abc= o.value;
+	var com  = document.getElementById('setlectPanel').getElementsByTagName("select")[0].value;	
+	
+
+	$.post("{:U('depart/getdepart')}",{"id":abc,"com":com}, function(data){
+		if(!data.status){
+			//alert(data.str);
+			if(data.str!=''){
+				$('#setlectPanel').html(data.str);		
+				departShowName();
+			}
+		}else{
+			
+		}
+	});
+}
+
+function departAdd(){
+	var list = document.getElementById('setlectPanel').getElementsByTagName("select");		
+	var parentId = list[list.length-1].value;
+	var name = $("#departAdd_name").val();
+	var com = list[0].value;
+	
+	if(com==0){
+		return;
+	}
+	
+	if(list.length==1){
+		parentId=0;
+	}
+	
+	var id = $("#edit_id").val();
+	
+	if(name!=''){
+		$.post('{:U('depart/editinfo')}',{"id":id,"parentId":parentId,"tname":name,"com":com}, function(data){
+			if(!data.status){
+				$('#departEditBox').dialog('close');
+				departSearch();
+			}else{
+				
+			}
+		});		
+	}
+}
+
+function departShowName(){
+	var list = document.getElementById('setlectPanel').getElementsByTagName("select");	
+	
+	//if(list.length>0){
+		for(var i =list.length-1;i>=0;i--){
+			if($(list[i]).find("option:selected").html()!='未选择'){
+				document.getElementById('setlectPanelstr').innerHTML = "当前所选：<br>"+$(list[i]).find("option:selected").html();
+				break;
+			}
+		}
+	//}else{
+		//document.getElementById('setlectPanelstr').innerHTML = "当前所选：<br>"+$(list[0]).find("option:selected").html();
+	//}
+
+}
+
+</script>
+<form id="departEditForm" style="font-size:13px; padding: 5px 0 0 10px;">
+<table>
+	<tr>
+		<td width="120">部门名称：</td>   
+		<td><input type="text" name="info[name]" id="departAdd_name" style="width:180px;height:22px" value="{$tname}" /></td>
+		<td><div id="departAdd_nameTip"></div></td>
+	</tr>
+	<tr>
+		<td >部门隶属于：</td>
+		<td id="setlectPanel">{$selectStr}</td><td><span id="setlectPanelstr"></span></td>
+	</tr>
+	
+</table>
+<input type="hidden" id="edit_id" value="{$edit_id}"/>
+</form>
+

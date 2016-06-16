@@ -1,0 +1,61 @@
+<script type="text/javascript">
+$(function() {
+	$.formValidator.initConfig({formID:"iosAddForm",theme:'App',onSuccess:apkAddUploadSave,inIframe:true});
+	$("#add_ios_version").formValidator({onShow:"请输入版本号",onFocus:"版本号不能为空"}).inputValidator({min:1,max:20,empty:{leftEmpty:false,rightEmpty:false,emptyError:"版本号两边不能有空格"},onError:"版本号不能为空,请确认"});
+	$("#add_ios_url").formValidator({onShow:"请上传apk",onFocus:"请上传apk"}).inputValidator({min:1,max:200,empty:{leftEmpty:false,rightEmpty:false,emptyError:"url两边不能有空格"},onError:"请上传apk"});
+	$("#add_ios_descp").formValidator({onShow:"请输入描述",onFocus:"描述不能为空"}).inputValidator({min:1,max:999,onError:"描述不能为空,请确认"});
+});
+function apkAddUploadSave(){
+	$.post('{:U('Version/iosAdd')}', $("#iosAddForm").serialize(), function(data){
+		if(!data.status){
+			$.messager.alert('提示信息', data.info, 'error');
+		}else{
+			iosRefreshList();
+			$.messager.alert('提示信息', data.info, 'info');
+			$('#iosAddBox').dialog('close');
+		}
+	})
+}
+</script>
+<form id="iosAddForm" style="padding: 10px;">
+	<table id="editBox">
+		<tr>
+			<td width="100" align="center">版&nbsp;本&nbsp;号：</td>
+			<td><input type="text" id="add_ios_version"
+				name="info[version]" value="" style="width: 400px; height: 20px;"></td>
+			<td><div id="add_ios_versionTip"></div></td>
+		</tr>
+		
+		<!-- <tr>
+			<td width="100" align="center">U<span style="margin-left: 10px;"></span>R<span style="margin-left: 10px;"></span>L：</td>
+			<td><input type="text" id="add_ios_url" name="info[url]"
+				value="" readonly="readonly" style="width: 400px;height: 20px;"></td>
+			<td><div id="add_ios_urlTip"></div></td>
+		</tr>
+		<tr>
+			<td width="100"></td>
+			<td>
+				<div id="queue"></div> <input id="add_ios_upload" name="add_ios_upload"
+				type="file" multiple="false">
+			</td>
+		</tr> -->
+		
+		<tr>
+			<td align="center">升级类型：</td>
+			<td><select id="add_ios_updatetype" panelHeight="auto" class="easyui-combobox" name="info[updatetype]"
+				style="width: 100px;">
+				<foreach name="uptype" item="u">
+					<option value="{$u.id}">{$u.text}</option>
+				</foreach>				
+				</select></td>
+			<td colspan="1"><div id="add_ios_updatetypesTip"></div></td>
+		</tr>
+		<tr>
+			<td width="100" align="center" valign="top">描<span style="margin-left: 25px;"></span>述：</td>
+			<td><textarea
+					style="width: 400px; height: 120px;"
+					id="add_ios_descp" name="info[description]"></textarea></td>
+			<td><div id="add_ios_descpTip"></div></td>
+		</tr>
+	</table>
+</form>

@@ -1,0 +1,117 @@
+<?php $rand = round(microtime(true),3)*1000;?>
+<table id="departList_{$rand}" class="easyui-datagrid" title="{$currentpos}" data-options="
+	fit:true,rownumbers:true,animate:true,fitColumns:true,
+	url:'{:U('depart/index',array('uid'=>I('id',0)))}',idField:'id',border:false,
+	toolbar:'#departToolbar_{$rand}',pagination:true,singleSelect:true,pageSize:20,nowrap:false">
+<thead>
+	<tr>
+		<th data-options="field:'name',width:10,align:'center'">部门名称</th>
+		<th data-options="field:'company_name',width:10,align:'center'">所属公司</th>
+		<th data-options="field:'parent_name',width:10,align:'center'">所属上级</th>
+		<th data-options="field:'edittime',width:10,align:'center'">修改时间</th>
+		<th data-options="field:'editadmin',width:10,align:'center'">最后修改者</th>
+		<th data-options="field:'id',width:10,align:'center',formatter:departOperateText">操作</th>
+	</tr>
+</thead>
+</table>
+
+<div id="departToolbar_{$rand}" style="padding:5px;height:auto">
+	<form id="departSearchForm_{$rand}">
+		      <if condition="session('roleid')==1">
+		按公司查询：<select name="search[company]"><option value="0">未选择</option>{$selectCompanyList}</select>		
+		</if>
+		根据名称搜索：<input type="text" name="search[name]" placeholder="" style="height: 20px; width: 120px;padding-left: 3px;"/>
+		<a href="javascript:;" onclick="departSearch();" class="easyui-linkbutton" iconCls="icon-search">确定</a>		
+		<a href="javascript:;" onclick="departAdd_{$rand}();" class="easyui-linkbutton" iconCls="icon-add">添加新部门</a>
+			
+	</form>
+</div>
+
+<!-- 编辑 -->
+<div id="departEditBox" class="easyui-dialog" title="修改部门信息"
+	data-options="modal:true,closed:true,iconCls:'icon-add',
+				buttons:[{text:'确定',iconCls:'icon-ok',
+				handler:function(){departAdd();}},
+				{text:'取消',iconCls:'icon-cancel',
+				handler:function(){$('#departEditBox').dialog('close');}}]"
+	style="width: 600px; height: 240px;"></div>
+	
+<div id="departAddBox" class="easyui-dialog" title="添加新部门"
+	data-options="modal:true,closed:true,iconCls:'icon-add',
+				buttons:[{text:'确定',iconCls:'icon-ok',
+				handler:function(){departAdd();}},
+				{text:'取消',iconCls:'icon-cancel',
+				handler:function(){$('#departAddBox').dialog('close');}}]"
+	style="width: 600px; height: 240px;"></div>
+
+<script type="text/javascript">
+function departAdd_{$rand}(){
+
+	var url = '{:U('depart/add')}';
+	url += '?rand={$rand}';
+	$('#departAddBox').dialog({href:url});
+	$('#departAddBox').dialog('open');
+}
+
+
+//刷新
+function departRefreshList_{$rand}(){
+	$('#departList_{$rand}').datagrid('reload');
+}
+//logo显示
+function buildLogo(val,row,index){
+	if(!val){
+		return '<div style="height:60px;padding:3px;margin:auto;"></div>';
+	}else{
+		return '<img src="'+val+'" height="60" style="padding:3px;">';	
+	}
+}
+//操作格式化
+function departOperateText(val, row, index){
+	var btn = [];
+		btn.push('<a href="javascript:void(0);" onclick="departEdit('+val+')">编辑</a>');
+		btn.push('<a href="javascript:void(0);" onclick="departDelete('+val+','+row.uid+')">删除</a>');
+	return btn.join(' | ');
+}
+//搜索会议
+function departSearch(){
+	var queryParams = $('#departList_{$rand}').datagrid('options').queryParams;
+	$.each($("#departSearchForm_{$rand}").form().serializeArray(), function (index) {
+		queryParams[this['name']] = this['value'];
+	});
+	
+	//queryParams['company'] = $('#depart_companyid').val();
+	//queryParams['company'] = $('#depart_companyid').val();
+	$('#departList_{$rand}').datagrid('load');
+}
+//会议编辑
+function departEdit(id){
+	if(typeof(id) !== 'number'){
+		$.messager.alert('提示信息', '未选择', 'error');
+		return false;
+	}
+	var url = '{:U('depart/edit')}';
+	url += url.indexOf('?') != -1 ? '&id='+id : '?id='+id;
+	url += '&rand={$rand}';
+	$('#departEditBox').dialog({href:url});
+	$('#departEditBox').dialog('open');
+}
+//会议删除 
+function departDelete(id, uid){
+	if(typeof(id) !== 'number'){
+		$.messager.alert('提示信息', '未选择', 'error');
+		return false;
+	}
+	$.messager.confirm('提示信息', '确定要删除吗？', function(result){
+		if(!result) return false;
+		$.post('{:U('depart/delete')}', {id: id, uid: uid}, function(data){
+			if(!data.status){
+				$.messager.alert('提示信息', data.info, 'error');
+			}else{
+				departRefreshList_{$rand}();
+				$.messager.alert('提示信息', data.info, 'info');
+			}
+		}, 'json');
+	});
+}
+</script>

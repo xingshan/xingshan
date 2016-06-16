@@ -1,0 +1,1219 @@
+<script type="text/javascript">
+
+function save(formname, url){
+	//alert(formname);
+	
+	$.post("{:U('" + url + "')}", $("#" + formname).serialize(), function(data){
+		if(!data.status){
+			$.messager.alert('提示信息1', data.info, 'error');
+		}else{
+			$.messager.alert('提示信息2', data.info, 'info');
+		}
+	})
+}
+</script>
+
+<div>
+<form  id="regform" name="regform" method="post" >
+<div>用户注册</div>
+		<div>
+		<input type="text" name="username" value="" />username<br />
+		<input type="text" name="password" value="" />password<br />
+		<input type="button" value="提交" onclick="save('regform', 'opreg');" />
+		</div>
+</form>
+</div>
+<br />
+
+
+
+<div>
+<form action = <!--{:U('Api/User/login')}--> method="post" >
+<div>用户登陆</div>
+		<div>
+		<input type="text" name="phone" value="" />phone<br />
+		<input type="text" name="password" value="" />password<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/User/regist')}--> method="post" >
+<div>用户注册</div>
+		<div>
+		<input type="text" name="phone" value="" />phone<br />
+		<input type="text" name="nickname" value="" />昵称<br />
+		<input type="text" name="password" value="" />password<br />
+		<input type="text" name="password2" value="" />password2<br />
+		
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/User/editUserInfo')}--> method="post" enctype="multipart/form-data" >
+<div>编辑用户信息</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="nickname" value="" />昵称<br />
+		<input type="text" name="sex" value="" />sex<br />
+		<input type="file" name="head" value="" />头像<br />
+		
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/User/publishUserComment')}--> method="post" enctype="multipart/form-data" >
+<div>发布用户评价</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="fuid" value="" />fuid<br />
+		<input type="text" name="integral" value="" />integral<br />
+		<input type="text" name="content" value="" />content 选填<br />
+		
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/User/modifyUserComment')}--> method="post" enctype="multipart/form-data" >
+<div>修改用户评价</div>
+		<div>
+		<input type="text" name="id" value="" />id<br />
+		<input type="text" name="integral" value="" />integral<br />
+		<input type="text" name="content" value="" />content 选填<br />
+		
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/User/userCommentList')}--> method="post" enctype="multipart/form-data" >
+<div>用户评价列表</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="fuid" value="" />fuid<br />
+		<input type="text" name="maxid" value="" />maxid<br />
+		<input type="text" name="sinceid" value="" />sinceid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/User/presentCoin')}--> method="post" enctype="multipart/form-data" >
+<div>赠送积分</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="fuid" value="" />fuid<br />
+		<input type="text" name="coin" value="" />coin<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/User/getExempt')}--> method="post" enctype="multipart/form-data" >
+<div>获取豁免权值</div>
+		<div>
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/User/buyExempt')}--> method="post" enctype="multipart/form-data" >
+<div>购买豁免权</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="id" value="" />id<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+
+<div>
+<form action = <!--{:U('Api/User/findPass')}--> method="post" >
+<div>找回密码</div>
+		<div>
+		<input type="text" name="phone" value="" />phone<br />
+		
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/User/getCode')}--> method="post" >
+<div>根据手机获取验证码</div>
+		<div>
+		<input type="text" name="phone" value="" />phone<br />
+		
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/User/checkCode')}--> method="post" >
+<div>核对检证码</div>
+		<div>
+		<input type="text" name="phone" value="" />phone<br />
+		<input type="text" name="code" value="" />"code"<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/User/resetPassword')}--> method="post" >
+<div> 重置密码</div>
+		<div>
+		<input type="text" name="phone" value="" />phone<br />
+		<input type="text" name="password" value="" />"password"<br />
+		<input type="text" name="password2" value="" />"password2"<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/User/regist_content')}--> method="post" >
+<div>注册协议</div>
+		<div>
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+
+<div>
+<form action = <!--{:U('Api/User/getUserInfo')}--> method="post" >
+<div>用户详细</div>
+		<div>
+		<input type="text" name="uid" value="" />uid  需要查询用户的id<br />
+		<input type="text" name="fuid" value="" />fuid 选填 需要被查询用户的id<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+
+<div>
+<form action = <!--{:U('Api/User/userPointRecord')}--> method="post" >
+<div>用户消费记录</div>
+		<div>
+		<input type="text" name="uid" value="" />uid  需要查询用户的id<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/User/addJuBao')}--> method="post" >
+<div>添加举报</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="fuid" value="" />fuid<br />
+		<input type="text" name="content" value="" />content<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+
+<div>
+<form action = <!--{:U('Api/User/addFeedback')}--> method="post" >
+<div>添加反馈</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="content" value="" />content<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Bus/addLine')}--> method="post" >
+<div>添加线路</div>
+		<div>
+		<input type="text" name="linename" value="" />linename<br />
+		<input type="text" name="startlinename" value="" />startlinename<br />
+		<input type="text" name="endlinename" value="" />endlinename<br />
+		<input type="text" name="isback" value="" />isback<br />
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="linepoints" value='[{"lng":20.22,"lat":30.22},{"lng":30,"lat":40.45}]' />linepoints<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Bus/getLine')}--> method="post" >
+<div>获取线路详细</div>
+		<div>
+		<input type="text" name="lineid" value="" />lineid<br />
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+
+<div>
+<form action = <!--{:U('Api/Bus/getNearbyLines')}--> method="post" >
+<div>获取附近线路</div>
+		<div>
+		
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="lat" value="" />lat<br />
+		<input type="text" name="lng" value="" />lng<br />
+		<input type="text" name="page" value="" />page<br />
+		<input type="text" name="pageSize" value="" />pageSize<br />
+		
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+
+<div>
+<form action = <!--{:U('Api/Bus/shareBusLocation')}--> method="post" >
+<div>分享公交车/客车位置</div>
+		<div>
+		
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="lat" value="" />lat<br />
+		<input type="text" name="lng" value="" />lng<br />
+		<input type="text" name="lineid" value="" />lineid<br />
+		<input type="text" name="direction " value="" />direction <br />
+		
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Bus/shareCarLocation')}--> method="post" >
+<div>分享私家车位置</div>
+		<div>
+		
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="lat" value="" />lat<br />
+		<input type="text" name="lng" value="" />lng<br />
+		<input type="text" name="description" value="" />description  选填 30个字符<br />
+		<input type="text" name="sharearea" value="" />sharearea  分享范围，0-所有人 1-好友<br />
+		<input type="text" name="sharemethod" value="" />sharemethod 分享方式， 0-直接可见 1-简介可见  <br />
+		<input type="text" name="canobject" value="" />canobject 可携带重物 0-不行 1-可行  <br />
+		<input type="text" name="fixpos" value="" />fixpos 0-未固定位置 1-固定位置  <br />
+		<input type="text" name="refreshtime" value="" />refreshtime 默认6秒<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Bus/updateShareLocation')}--> method="post" >
+<div>更新分享位置</div>
+		<div>
+		
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="lat" value="" />lat<br />
+		<input type="text" name="lng" value="" />lng<br />
+		<input type="text" name="shareid" value="" />shareid <br />
+		<input type="text" name="type" value="" />type 分享位置类型，0—公交车 1—私家车 <br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Bus/getNearbyCar')}--> method="post" >
+<div>查看附近可趁的车</div>
+		<div>
+		
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="lat" value="" />lat<br />
+		<input type="text" name="lng" value="" />lng<br />
+		<input type="text" name="onlyfriend" value="" />onlyfriend <br />
+		<input type="text" name="canobject" value="" />canobject <br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Bus/requestCar')}--> method="post" >
+<div>求搭车</div>
+		<div>
+		
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="lat" value="" />lat<br />
+		<input type="text" name="lng" value="" />lng<br />
+		<input type="text" name="description" value="" />description 选填 <br />
+	
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Bus/closeRequestCar')}--> method="post" >
+<div>关闭求搭车</div>
+		<div>
+		
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Bus/getLineCars')}--> method="post" >
+<div>获取线路上的公交车</div>
+		<div>
+		
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="lat" value="" />lat<br />
+		<input type="text" name="lng" value="" />lng<br />
+		<input type="text" name="lineid" value="" />lineid  <br />
+		<input type="text" name="direction" value="" />direction   0-方向0   1-方向1   2-2个方向的 选填 <br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Bus/simulateBusWalk')}--> method="post" >
+<div>模拟公交车行走</div>
+		<div>
+		
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="lineid" value="" />lineid<br />
+		
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+============================= 帖子相关 ==================================
+<div>
+<form action = <!--{:U('Api/Note/pulishNote')}--> method="post"  enctype="multipart/form-data" >
+<div>发布帖子</div>
+		<div>
+		
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="level1" value="1" />"level1"<br />
+		<input type="text" name="level2" value="1" />"level2"<br />
+		<input type="text" name="title" value="" />title<br />
+		<input type="text" name="content" value="" />content<br />
+		<input type="file" name="imgs" value="" /><br />
+		<input type="file" name="imgs" value="" /><br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Note/deleteNote')}--> method="post"  enctype="multipart/form-data" >
+<div>删除帖子</div>
+		<div>
+		
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="noteid" value="" />"noteid"<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+
+<div>
+<form action = <!--{:U('Api/Note/publishNoteComment')}--> method="post" >
+<div>发布帖子评论</div>
+		<div>
+		
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="noteid" value="" />noteid<br />
+		<input type="text" name="parentid" value="" />parentid<br />
+		<input type="text" name="content" value="" />content 选填<br />
+		<input type="text" name="goodheartpr" value="" />goodheartpr 选填<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Note/noteList')}--> method="post" >
+<div>获取帖子列表</div>
+		<div>
+		
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="maxid" value="" />maxid<br />
+		<input type="text" name="sinceid" value="" />sinceid<br />
+		<input type="text" name="search" value="" />search<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Note/getTaNotes')}--> method="post" >
+<div>获取TA帖子列表</div>
+		<div>
+		
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="fuid" value="" />"fuid"<br />
+		<input type="text" name="maxid" value="" />maxid<br />
+		<input type="text" name="sinceid" value="" />sinceid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Note/noteCommentList')}--> method="post" >
+<div>获取帖子评论列表</div>
+		<div>
+		
+		<input type="text" name="noteid" value="" />noteid<br />
+		<input type="text" name="maxid" value="" />maxid<br />
+		<input type="text" name="sinceid" value="" />sinceid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Note/getNoteDetail')}--> method="post" >
+<div>获取帖子详细</div>
+		<div>
+		
+		<input type="text" name="noteid" value="" />noteid<br />
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Note/see')}--> method="post" >
+<div>增加一个看</div>
+		<div>
+		
+		<input type="text" name="noteid" value="" />noteid<br />
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Note/zan')}--> method="post" >
+<div>增加一个赞</div>
+		<div>
+		
+		<input type="text" name="noteid" value="" />noteid<br />
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Note/collect')}--> method="post" >
+<div>收藏帖子</div>
+		<div>
+		
+		<input type="text" name="noteid" value="" />noteid<br />
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Note/cancelCollect')}--> method="post" >
+<div>取消收藏帖子</div>
+		<div>
+		
+		<input type="text" name="noteid" value="" />noteid<br />
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Note/myCollectNotes')}--> method="post" >
+<div>我收藏的帖子</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="page" value="" />page<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Note/myReplyNotes')}--> method="post" >
+<div>我回复的</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="page" value="" />page<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Note/myPublishNotes')}--> method="post" >
+<div>我发布的</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="page" value="" />page<br />
+		<input type="text" name="pageSize" value="" />pageSize<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+============================= 菜品相关 ==================================
+
+<div>
+<form action = <!--{:U('Api/Cai/getCaiPinList')}--> method="post" >
+<div>获取菜品</div>
+		<div>
+		<input type="text" name="uid" value="0" />uid<br />
+		<input type="text" name="order" value="0" />order<br />
+		<input type="text" name="categoryid" value="" />categoryid 选填<br />
+		<input type="text" name="maxid" value="" />maxid<br />
+		<input type="text" name="sinceid" value="" />sinceid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Cai/categoryList')}--> method="post" >
+<div>获取菜品类别</div>
+		<div>
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Cai/deliverArea')}--> method="post" >
+<div>获取商家的配送区域</div>
+		<div>
+		
+		<input type="text" name="fuid" value="" />fuid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Cai/addDeliverArea')}--> method="post" >
+<div>添加商家配送区域</div>
+		<div>
+		
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="areaname" value="" />areaname<br />
+		<input type="text" name="price" value="" />price<br />
+		<input type="text" name="freeprice" value="" />freeprice<br />
+		<input type="text" name="lng" value="" />lng<br />
+		<input type="text" name="lat" value="" />lat<br />
+		<input type="text" name="lat" value="" />presaledate<br />
+		<input type="text" name="lat" value="" />timeperiod<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Cai/deleteDeliverArea')}--> method="post" >
+<div>删除加商家配送区域</div>
+		<div>
+		
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="ID" value="" />ID<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Cai/submitOrder')}--> method="post" >
+<div>提交订单</div>
+		<div>
+		<input type="text" name="type" value="" />type<br />
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="shopid" value="" />shopid<br />
+		<input type="text" name="shop" value="" />shop 数据格式为shopcartid,shopcartid,<br />
+		
+		<input type="text" name="mealtime" value="" />mealtime<br />
+		<input type="text" name="contactor" value="" />contactor<br />
+		<input type="text" name="phone" value="" />phone<br />
+		<input type="text" name="addr" value="" />addr<br />
+		<input type="text" name="areaid" value="" />areaid<br />
+		<input type="text" name="paytype" value="" />paytype<br />
+		
+		<input type="text" name="carriagefee" value="" />carriagefee<br />
+		<input type="text" name="shopfee" value="" />shopfee<br />
+		<input type="text" name="totalfee" value="" />totalfee<br />
+		
+		<input type="text" name="timeperiod" value="" />timeperiod<br />
+		<input type="text" name="dayperiod" value="" />dayperiod<br />
+		
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+
+<div>
+<form action = <!--{:U('Api/Cai/pushCaiPin')}--> method="post" enctype="multipart/form-data"  >
+<div>发布菜品</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="level1" value="0" />"level1"<br />
+		<input type="text" name="level2" value="0" />"level2"<br />
+		<input type="text" name="title" value="" />title<br />
+		<input type="text" name="content" value="" />content<br />
+		
+		<input type="text" name="istese" value="" />istese<br />
+		<input type="text" name="mustonlinepay" value="" />mustonlinepay<br />
+		<input type="text" name="categoryid" value="" />categoryid<br />
+		<input type="text" name="price" value="" />price<br />
+		<input type="text" name="maxnums" value="" />maxnums<br />
+		<input type="text" name="unit" value="" />unit<br />
+		
+		<input type="file" name="imgs" value="" /><br />
+		<input type="file" name="imgs" value="" /><br />
+		
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Cai/editCaiPin')}--> method="post" enctype="multipart/form-data"  >
+<div>编辑菜品</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="noteid" value="" />noteid<br />
+		<input type="text" name="price" value="" />price<br />
+		<input type="text" name="maxnums" value="" />maxnums<br />
+		<input type="text" name="unit" value="" />unit<br />
+
+		
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Cai/changeCaiPinState')}--> method="post" >
+<div>改变商品状态</div>
+		<div>
+		<input type="text" name="noteid" value="" />noteid<br />
+		<input type="text" name="state" value="" /> state-1 售罄中   2-下架中 3<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Cai/shopperCaiPin')}--> method="post" >
+<div>获取商家菜品</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="maxid" value="" />maxid<br />
+		<input type="text" name="sinceid" value="" />sinceid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Cai/setShopperPlacard')}--> method="post" >
+<div>设置商家公告</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="placard" value="" />placard<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+
+<div>
+<form action = <!--{:U('Api/Cai/shopperOrderList')}--> method="post" >
+<div>商家订单</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="type" value="" />type 0-按订单时间 1-按送达时间<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+
+
+<div>
+<form action = <!--{:U('Api/Cai/getOrderDetailInfo')}--> method="post" >
+<div>获取订单详细</div>
+		<div>
+		<input type="text" name="orderid" value="" />orderid<br />
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Cai/userOrderList')}--> method="post" >
+<div>用户订单</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="maxid" value="" />maxid<br />
+		<input type="text" name="sinceid" value="" />sinceid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+============================= 购物车相关 ==================================
+<div>
+<form action = <!--{:U('Api/Cai/add2Shopcart')}--> method="post" >
+<div>添加商品到购物车</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="shopid" value="" />shopid<br />
+		<input type="text" name="noteid" value="" />noteid<br />
+		<input type="text" name="nums" value="" />nums<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Cai/shopcart')}--> method="post" >
+<div>返回用户购物车信息</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Cai/setShopcartNum')}--> method="post" >
+<div>调整购物车的数量</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="shopcartid" value="" />"shopcartid"<br />
+		<input type="text" name="nums" value="" />nums<br />
+		
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+
+<div>
+<form action = <!--{:U('Api/Cai/shopHandleOrder')}--> method="post" >
+<div>商家处理订单</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="type" value="" />type 0-接收 1-拒绝<br />
+		<input type="text" name="orderids" value="" />"orderids 1,2,3"<br />
+		<input type="text" name="content" value="" />content 拒绝理由<br />
+		
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+
+<div>
+<form action = <!--{:U('Api/Cai/userHandleOrder')}--> method="post" >
+<div>用户处理订单</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="orderid" value="" />orderid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+============================= 消息相关 ==================================
+<div>
+<form action = <!--{:U('Api/Message/sendMessage')}--> method="post" enctype="multipart/form-data" >
+<div>发送一条消息</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="msgtype" value="0" />msgtype 1-word 2-voice<br />
+		<input type="text" name="fuid" value="" />fuid<br />		
+		<input type="text" name="content" value="" />content<br />
+		<input type="file" name="voice" value="" />voice<br />
+		<input type="text" name="voicelen" value="" />voicelen<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+
+<div>
+<form action = <!--{:U('Api/Message/sendSystemMessage')}--> method="post" >
+<div>发送一条系统消息</div>
+		<div>
+		<input type="text" name="fuid" value="" />fuid<br />
+		<input type="text" name="content" value="" />content<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Message/userMessageList')}--> method="post" >
+<div>获取某个人的消息列表</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="fuid" value="" />fuid<br />
+		<input type="text" name="maxid" value="" />maxid<br />
+		<input type="text" name="sinceid" value="" />sinceid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Message/messageList')}--> method="post" >
+<div>获取会话列表</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Message/systemMessageList')}--> method="post" >
+<div>获取系统消息</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="maxid" value="" />maxid<br />
+		<input type="text" name="sinceid" value="" />sinceid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Message/deleteMessage')}--> method="post" >
+<div>删除消息</div>
+		<div>
+		<input type="text" name="messageid" value="" />"messageid"<br />
+		<input type="text" name="uid" value="" />"uid"<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Message/getUnreadMessageNums')}--> method="post" >
+<div>获取未读信息数量</div>
+		<div>
+		<input type="text" name="uid" value="" />"uid"<br />
+		<input type="text" name="type" value="" />"type 0-私聊 否则系统"<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Message/resetPersonUnreadMessage')}--> method="post" >
+<div>重置个人私信未读数量为0</div>
+		<div>
+		<input type="text" name="uid" value="" />"uid"<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Message/markSystemMessageRead')}--> method="post" >
+<div>标记系统消息为已读</div>
+		<div>
+		<input type="text" name="uid" value="" />"uid"<br />
+		<input type="text" name="messageids" value="" />"messageid,messageid"<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+============================= 好友相关 ==================================
+<div>
+<form action = <!--{:U('Api/Friend/to_friend')}--> method="post" enctype ="multipart/form-data" >
+<div>好友申请</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="fuid" value="" />fuid<br />
+		<input type="text" name="level" value="" />level<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Friend/be_friend')}--> method="post" enctype ="multipart/form-data" >
+<div>同意加为好友</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="fuid" value="" />fuid<br />
+		<input type="text" name="level" value="" />level<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Friend/friend_mark')}--> method="post" enctype ="multipart/form-data" >
+<div>好友备注</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="fuid" value="" />fuid<br />
+		<input type="text" name="markName" value="" />markName<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Friend/refuse_f')}--> method="post" enctype ="multipart/form-data" >
+<div>拒绝好友申请</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="fuid" value="" />fuid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Friend/del_friend')}--> method="post" enctype ="multipart/form-data" >
+<div>删除好友</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="fuid" value="" />fuid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Friend/getFriendlist')}--> method="post" enctype ="multipart/form-data" >
+<div>获取好友列表</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Friend/searchFriend')}--> method="post" enctype ="multipart/form-data" >
+<div>查找好友</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="keyword" value="" />keyword<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Friend/telephone')}--> method="post" enctype ="multipart/form-data" >
+<div>导入手机号码识别关系</div>
+		<div>
+		<input type="text" name="uid" value="" />uid<br />
+		<input type="text" name="phone" value="" />phone<br />
+		<input type="text" name="name" value="" />name<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+============================= 其他相关 ==================================
+
+
+<div>
+<form action = <!--{:U('Api/Version/getVersion')}--> method="post" >
+<div>检测版本</div>
+		<div>
+		<input type="text" name="os" value="" />"os android ios"<br />
+		<input type="text" name="version" value="" />"version"<br />
+		<input type="text" name="ID" value="" />"ID 选填"<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/Version/test')}--> method="post" >
+<div>测试排序</div>
+		<div>
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/User/help_app')}--> method="post" >
+<div>帮助中心</div>
+		<div>
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+============================= 支付相关 ==================================
+<div>
+<form action = <!--{:U('Api/Pay/alipayRecharge')}--> method="post" >
+<div>支付宝充值</div>
+		<div>
+		<input type="text" name="uid" value="" />"uid"<br />
+		<input type="text" name="coin" value="" />"coin"<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+============================= IOS消息推送 ==================================
+<div>
+<form action = <!--{:U('Api/IosMessagePush/addNoticeHostForIphone')}--> method="post" >
+<div>添加设备</div>
+		<div>
+		<input type="text" name="uid" value="" />"uid"<br />
+		<input type="text" name="udid" value="" />"udid"<br />
+		<input type="text" name="neednotice" value="" />"neednotice 0 1"<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+
+<div>
+<form action = <!--{:U('Api/IosMessagePush/removeNoticeHostForIphone')}--> method="post" >
+<div>移除设备</div>
+		<div>
+		<input type="text" name="uid" value="" />"uid"<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+
+<div>
+<form action = <!--{:U('Api/IosMessagePush/setNoticeForIphone')}--> method="post" >
+<div>添加设备</div>
+		<div>
+		<input type="text" name="uid" value="" />"uid"<br />
+		<input type="text" name="neednotice" value="" />"neednotice"<br />
+		<input type="submit" value="提交" />
+		</div>
+</form>
+</div>
+<br />
+

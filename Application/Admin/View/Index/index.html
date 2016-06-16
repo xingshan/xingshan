@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="shortcut icon" href="../../../favicon.ico" mce_href="favicon.ico" type="image/x-icon" />
+<title></title>
+<include file="Public:head"/>
+<include file="Public:formvalidator"/>
+<include file="Public:uploadify"/> <!-- 上传文件 -->
+<include file="Public:editor" /><!-- 编辑器 -->
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/admin/bootstrap.css" />
+</head>
+<body class="easyui-layout">
+<!-- 头部 -->
+<div id="toparea" data-options="region:'north',border:false">
+	<div id="topmenu" class="easyui-panel" data-options="fit:true,border:false">
+		<a class="logo" style="cursor: pointer;" href="http://www.thinkchat.com.cn" target="_blank"></a>
+		<ul class="nav">
+			<foreach name="menu_array" item="_value">
+				<li><a <eq name="_value.id" value="1">class="focus"</eq> href="javascript:void(0);" onclick="getLeft({$_value.id},'{$_value.name}', this)"><strong style="font-size: 14px;">{$_value.name}</strong></a></li>
+			</foreach>
+		</ul>
+		<ul class="nav-right">
+			<li>
+				<span>您好！ {$admin_username} [{$rolename}] | <a href="javascript:logout();">[退出]</a></span>
+				<!-- 
+				 | 
+				<select class="easyui-combobox" data-options="editable:false,panelHeight:'auto',onChange:onChangeTheme">
+					<option value='default' >Default</option>
+					<option value='gray' >Gray</option>
+					<option value='bootstrap' selected>Bootstrap</option>
+					<option value='metro' >Metro</option>
+				</select> -->
+			</li>
+		</ul>
+	</div>
+</div>
+    
+<!-- 左侧菜单 -->
+<div id="leftarea" data-options="iconCls:'icon-tip',region:'west',title:'我的面板',split:true">
+	<div id="leftmenu" class="easyui-accordion" data-options="fit:true,border:false"></div>
+</div>  
+    
+<!-- 内容 -->
+<div id="mainarea" data-options="region:'center'">
+    <div id="pagetabs" class="easyui-tabs" data-options="tabPosition:'top',fit:true,border:false,plain:false">
+    	<div title="首页"  href="{:U('Index/public_main')}" data-options="cache:false"></div>
+    </div>
+</div>
+
+<!-- 尾部 -->
+<div id="footarea" data-options="region:'south',border:false" style="height: 30px;">
+
+</div>
+
+<script type="text/javascript">
+$(function(){
+	getLeft(1, '信息管理');
+	$.messager.show({			//登录默认提示
+		title:'登录提示',
+		msg:'您好！{$admin_username} 欢迎回来！<br/>最后登录时间：<if condition="$info['lastlogintime']">{$info['lastlogintime']|date='Y-m-d H:i:s',###}<else/>-</if><br/>最后登录IP：{$info['lastloginip']}',
+		timeout:5000,
+		showType:'slide'
+	});
+})
+//退出登录
+function logout(){
+	$.messager.confirm('提示信息', '确定要退出登录吗？', function(result){
+		if(result) window.location.href = '{:U('Index/public_logout')}';
+	})
+}
+//切换主题
+function onChangeTheme(theme){
+	$('head').find('link:first').attr('href', '__PUBLIC__/js/easyui/themes/'+theme+'/easyui.css');
+	$('head').find('link:last').attr('href', '__PUBLIC__/css/admin/'+theme+'.css');
+}
+//显示左侧栏目
+function getLeft(menuid, title, that){
+	//更新标题名称
+	$('body').layout('panel', 'west').panel({title: title});
+	//获取左侧内容
+	removeLeft();
+	$.post('{:U('Index/public_menuLeft')}', {menuid: menuid}, function(data){
+		removeLeft();
+		//增加
+		$.each(data, function(i, menu) {
+	        var menulist = '<dl class="sonmenu">';
+			$.each(menu.son, function(i, son) {
+				menulist += '<dd><a href="javascript:void(0);" onclick="openUrl(\''+son.url+'\', \''+son.name+'\', this)">'+son.name+'</a></dd>';
+			});
+			menulist += '</dl>';
+			$("#leftmenu").accordion("add", {title: menu.name, content: menulist, selected: false});
+		});
+		$('#leftmenu').accordion('select',0);//第一个默认展开
+	})
+	//默认选中头部菜单
+	if(that){
+		$('#topmenu .nav li').each(function(){
+			$(this).children().removeClass('focus');
+		})
+		$(that).addClass('focus');
+	}
+}
+//移除左侧菜单
+function removeLeft(stop){
+	var pp = $("#leftmenu").accordion("panels");
+	$.each(pp, function(i, n) {
+		if(n){
+			var t = n.panel("options").title;
+			$("#leftmenu").accordion("remove", t);
+		}
+    });
+	var pp = $('#leftmenu').accordion('getSelected');
+    if(pp) {
+        var t = pp.panel('options').title;
+        $('#leftmenu').accordion('remove', t);
+    }
+    if(!stop) removeLeft(true)//发现执行两次才能彻底移除
+}
+//显示打开内容
+function openUrl(url, title, that){
+	if($('#pagetabs').tabs('exists', title)){
+		$('#pagetabs').tabs('select', title);
+	}else{
+		$('#pagetabs').tabs('add',{
+			title: title,
+			href: url,
+			closable: true,
+			cache: false
+		});
+	}
+	//默认选择左侧菜单
+	if(that){
+		$('#leftmenu .sonmenu a').each(function(){
+			$(this).removeClass('focus');
+		})
+		$(that).addClass('focus');
+	}
+}
+//防止登录超时和后台在线人数统计
+setInterval(function(){
+	$.get('{:U('Index/public_sessionLife')}');
+}, 180000);
+</script>
+</body>
+</html>

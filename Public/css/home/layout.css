@@ -1,0 +1,25 @@
+@CHARSET "UTF-8";
+*{margin: 0; padding: 0}
+a{text-decoration: none; color: #000}
+a:hover{color: blue}
+
+#wrap {
+	width: 1000px; 
+	height: auto; 
+	border: 1px solid #ccc;
+	margin-left: auto;
+	margin-right: auto;
+}
+.img{
+	background: url('../../img/home.jpg') no-repeat;
+	width: 1000px;
+	height: 526px;
+	text-align: center;
+}
+.login{
+	float: left; 
+	padding-top: 200px; 
+	padding-left: 400px;
+}
+input {border: 1px solid #ccc; height: 20px; font-size: 14px; padding: 3px 6px; width: 250px;}
+table td{ padding: 5px 0px 5px 0px;}

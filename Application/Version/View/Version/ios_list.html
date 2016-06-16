@@ -1,0 +1,93 @@
+<!-- 用户列表 -->
+<table id="iosList" class="easyui-datagrid" title="{$currentpos}" data-options="
+	fit:true,rownumbers:true,animate:true,fitColumns:true,
+	url:'{:U('Version/ios')}',idField:'id',border:false,
+	toolbar:iosToolbar,pagination:true,singleSelect:true,nowrap:false">
+<thead>
+	<tr>
+		<th data-options="field:'version',width:100,align:'center'">版本号</th>
+		<th data-options="field:'description',width:400">描述</th>
+		<th data-options="field:'updatetype',width:80,align:'center',formatter:updateTypeText">升级类型</th>
+		<th data-options="field:'createtime',width:100,align:'center'">添加时间</th>
+		<th data-options="field:'id',width:100,align:'center',formatter:iosOperateText">操作</th>
+	</tr>
+</thead>
+</table>
+
+<!-- 添加 -->
+<div id="iosAddBox" class="easyui-dialog" title="添加ios"
+	data-options="modal:true,closed:true,iconCls:'icon-add',buttons:[{text:'确定',iconCls:'icon-ok',handler:function(){$('#iosAddForm').submit();}},{text:'取消',iconCls:'icon-cancel',handler:function(){$('#iosAddBox').dialog('close');}}]"
+	style="width: 730px; height: 380px;"></div>
+<!-- 编辑 -->
+<div id="iosEditBox" class="easyui-dialog" title="编辑ios"
+	data-options="modal:true,closed:true,iconCls:'icon-add',buttons:[{text:'确定',iconCls:'icon-ok',handler:function(){$('#iosEditForm').submit();}},{text:'取消',iconCls:'icon-cancel',handler:function(){$('#iosEditBox').dialog('close');}}]"
+	style="width: 730px; height: 380px;"></div>
+<script type="text/javascript">
+//工具栏
+var iosToolbar = [
+	{ text: '刷新', iconCls: 'icon-reload', handler: iosRefreshList },
+	{ text: '添加', iconCls: 'icon-add', handler: iosAdd },
+];
+//升级类型格式化
+function updateTypeText(val){
+	var html = '';
+	if (val == 0){
+		html = '正常升级';
+	}else if(val == 1){
+		html = '警告升级';
+	}else if(val == 2){
+		html = '强制升级';
+	}
+	return html;
+}
+//ios下载
+function iosDownload(val){
+	return '<a target="_blank" href="'+val+'">下载</a>';
+}
+//操作格式化
+function iosOperateText(val, row, index){
+	var btn = [];
+		btn.push('<a href="javascript:void(0);" onclick="iosEdit('+val+')">编辑</a>');
+		btn.push('<a href="javascript:void(0);" onclick="iosDelete('+val+')">删除</a>');
+	return btn.join(' | ');
+}
+//刷新
+function iosRefreshList(){
+	$('#iosList').datagrid('reload');
+}
+//添加
+function iosAdd(){
+	var url = '{:U('Version/iosAdd')}';
+	$('#iosAddBox').dialog({href:url});
+	$('#iosAddBox').dialog('open');
+}
+//ios编辑
+function iosEdit(id){
+	if(typeof(id) !== 'number'){
+		$.messager.alert('提示信息', '请选择一条记录', 'error');
+		return false;
+	}
+	var url = '{:U('Version/iosEdit')}';
+	url += url.indexOf('?') != -1 ? '&id='+id : '?id='+id;
+	$('#iosEditBox').dialog({href:url});
+	$('#iosEditBox').dialog('open');
+}
+//ios删除 
+function iosDelete(id){
+	if(typeof(id) !== 'number'){
+		$.messager.alert('提示信息', '未选择', 'error');
+		return false;
+	}
+	$.messager.confirm('提示信息', '确定要删除吗？', function(result){
+		if(!result) return false;
+		$.post('{:U('Version/delete')}', {id: id}, function(data){
+			if(!data.status){
+				$.messager.alert('提示信息', data.info, 'error');
+			}else{
+				iosRefreshList();
+				$.messager.alert('提示信息', data.info, 'info');
+			}
+		}, 'json');
+	});
+}
+</script>

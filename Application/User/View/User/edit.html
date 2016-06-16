@@ -1,0 +1,98 @@
+<script type="text/javascript">
+$(function(){
+	$('#edit_user_upload').uploadify({
+		'swf'      : '__PUBLIC__/js/uploadify/uploadify.swf',
+		'uploader' : '{:U('User/public_uploadHead?uid='.$info["uid"])}',
+		'buttonText': '选择图片',
+		'width'	: 70,
+		'height': 28,
+		'buttonClass': 'upload_button',
+		'auto'	: true,
+		'removeTimeout' : 0,//文件队列上传完成1秒后删除
+		'fileTypeDesc' : 'Image Files',//只允许上传图像
+		'fileTypeExts' : '*.gif; *.jpg; *.png',//限制允许上传的图片后缀
+		'onUploadSuccess' : function(file, data, response){
+			var data = $.parseJSON(data);
+			if(!data.status){
+				$.messager.alert('提示信息', data.info, 'error');
+			}else{
+				$('#edit_user_image').attr('src',data.url);
+				$('#edit_user_head').attr('value',data.url);
+			}
+		}
+	});
+	$.formValidator.initConfig({formID:"userEditForm",theme:'App',onError:function(msg){},onSuccess:user_SaveEdit,inIframe:true});
+	$("#user_edit_nickname").formValidator({onShow:"请输入用户昵称",onFocus:"请输入用户昵称"}).inputValidator({min:2,max:20,empty:{leftEmpty:false,rightEmpty:false,emptyError:"昵称两边不能有空格"},onError:"昵称应该为2-20位之间"}).ajaxValidator({
+		type : "post",
+		url : "{:U('User/public_checkNickname')}",
+		data : {nickname: function(){return $("#user_edit_nickname").val()}, default: '{$info.nickname}'},
+		datatype : "json",
+		async:'false',
+		success : function(data){
+			var json = $.parseJSON(data);
+            return json.status == 1 ? false : true;
+		},
+		onError : "该昵称已经存在",
+		onWait : "请稍候..."
+	});
+	$("#user_edit_sign").formValidator({onShow:"请输入用户签名",onFocus:"用户签名应该为10-140位之间"}).inputValidator({min:10,max:140,empty:{leftEmpty:false,rightEmpty:false,emptyError:"用户签名两边不能有空格"},onError:"用户签名应该为10-140位之间"});
+})
+function user_SaveEdit(){
+	$.post('{:U('User/edit?uid='.$info['uid'])}', $("#userEditForm").serialize(), function(data){
+		if(!data.status){
+			$.messager.alert('提示信息', data.info, 'error');
+		}else{
+			userRefreshList_{$rand}()
+			$.messager.alert('提示信息', data.info, 'info');
+			$('#userEditBox').dialog('close');
+		}
+	})
+}
+</script>
+<form id="userEditForm" style="font-size:13px; padding: 5px 0 0 10px;">
+<table cellspacing="5">
+	<tr>
+		<td></td>
+		<td colspan="2" align="center">
+			<div style="float: left; width:auto;">
+				<div style="float: left; width:auto; padding: 2px;">
+					<img id="edit_user_image" src="{$info.headsmall}" height="80px;" style="min-width: 80px;padding: 3px; border: 1px solid #ccc;">
+				</div>
+			</div>
+			<div style="margin-left: 5px; float: left; width:240px; height:80px; padding:5px;">
+				<div style="width: 100%; height: 30px;"></div>
+				<input id="edit_user_upload" name="edit_user_upload" type="file">
+			</div>
+			<input id="edit_user_head" name="info[headsmall]" value="{$info.headsmall}" type="hidden">
+		</td>
+	</tr>
+	<tr>
+		<td width="80">手<span style="margin-left: 6px;"></span>机<span style="margin-left: 7px;"></span>号：</td>
+		<td>{$info.phone}</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>用户昵称：</td>
+		<td><input type="text" name="info[nickname]" id="user_edit_nickname" value="{$info.nickname}" style="width:280px;height:22px" /></td>
+		<td><div id="user_edit_nicknameTip"></div></td>
+	</tr>
+	<tr>
+		<td>真实性别：</td>
+		<td>
+			<input id="user_edit_realname" class="easyui-combobox" name="info[gender]" value="{$info.gender}"
+					data-options="
+						valueField:'id',
+						textField:'text',
+						data: [{'id':'0','text':'男'},{'id':'1','text':'女'},{'id':'2','text':'未填写'}],
+						panelHeight:'auto',
+			">
+			</td>
+		<td><div id="user_edit_genderTip"></div></td>
+	</tr>
+	<tr>
+		<td>用户签名：</td>
+		<td><textarea name="info[sign]" id="user_edit_sign" style="width: 280px; height: 88px;">{$info.sign}</textarea></td>
+		<td><div id="user_edit_signTip"></div></td>
+	</tr>
+	</table>
+	</form>
